@@ -1,4 +1,4 @@
-# Webpack Config
+# Webpack Boilerplate
 
 This is my personal Webpack configuration. It's a framework agnostic boilerplate that's designed for use for general JS projects.
 
