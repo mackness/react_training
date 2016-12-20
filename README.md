@@ -10,6 +10,12 @@ npm install
 npm run dev
 ```
 
+## Test
+```
+npm t 
+```
+
+
 ## LICENSE
 
 MIT
