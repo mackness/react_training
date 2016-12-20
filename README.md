@@ -6,7 +6,7 @@ This is my personal Webpack configuration. It's a framework agnostic boilerplate
 
 You will need node v6 and npm v3 or greater installed.
 ```
-npm install 
+npm i
 npm run dev
 ```
 
