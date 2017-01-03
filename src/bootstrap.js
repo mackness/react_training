@@ -1,8 +1,6 @@
 /* eslint no-console:0 */
 export {bootstrap}
 
-// this is only relevant when using `hot` mode with webpack
-// special thanks to Eric Clemmons: https://github.com/ericclemmons/webpack-hot-server-example
 const reloading = document.readyState === 'complete'
 if (module.hot) {
   module.hot.accept(function(err) {
