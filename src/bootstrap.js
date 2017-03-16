@@ -27,20 +27,34 @@ class Favorites extends React.Component {
 }
 
 class List extends React.Component {
-  
+
   state = {
-    red: false,
+    open: false
+  }
+
+  toggleAll = () => {
+    this.setState({open: !this.state.open})
   }
  
   render() {
-    const children = this.props.children.map(child=> (
-      console.log(child)
-    ))
-    return (
-      <div>
-        {this.props.children}
-      </div>
-    )
+    const children = this.props.children.map(child => {
+      if (child.type === ListItem) {
+        return React.cloneElement(child, {
+          open: this.state.open
+        })
+      } else {
+        return React.cloneElement(child, {
+          toggleAll: this.toggleAll
+        })
+      }
+    })
+    return <div>{children}</div>
+  }
+}
+
+class ToggleAll extends React.Component {
+  render() {
+    return <button onClick={this.props.toggleAll}>toggle all</button>
   }
 }
 
@@ -49,13 +63,21 @@ class ListItem extends React.Component {
   state = {
     open: false
   }
+
+  componentWillReceiveProps() {
+    this.setState({open: this.props.open})
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return true
+  }
   
-  handleClick = () => {
+  toggleListItem = () => {
     this.setState({open: !this.state.open})
   }
   
   render() {
-    return this.props.render(this.state.open, this.handleClick)
+    return this.props.render(this.state.open, this.toggleListItem)
   }
 }
 
@@ -78,7 +100,7 @@ class LoadSubredditData extends React.Component {
   componentWillMount() {
     fetch(`https://www.reddit.com/r/${this.props.subreddit}.json`)
       .then((res) => {
-          return res.json();
+          return res.json()
       }).then((json) => {
           const {
             author,
@@ -94,7 +116,7 @@ class LoadSubredditData extends React.Component {
           }
       }).then((state) => {
         this.setState(state)
-      });
+      })
   }
 
   setFavorite = (favorite) => {
@@ -123,7 +145,7 @@ class App extends React.Component {
   getChildContext() {
     return {
       app: {
-        favorites: this.state.favorites, 
+        favorites: this.state.favorites,
         setFavorite: (favorite) => this.setFavorite(favorite)
       }
     }
@@ -132,13 +154,11 @@ class App extends React.Component {
   setFavorite = (favorite) => {
     const {favorites} = this.state
     favorites.push(favorite)
-    this.setState({
-      favorites: favorites
-    })
+    this.setState({favorites})
   }
 
   render() {
-    const subreddits = ['javascript', 'webdev', 'funny', 'aww', 'totallynotrobots']
+    const subreddits = ['javascript', 'webdev', 'funny', 'youtubehaiku', 'totallynotrobots']
     return (
       <div>
         <Favorites />
@@ -154,7 +174,7 @@ class App extends React.Component {
                         <span>{`score: ${response.score}`}</span>
                         <span>{`author: ${response.author}`}</span>
                         <a href={`https://www.reddit.com/${response.permalink}`}>{response.title}</a>
-                        <a href="#" onClick={()=> setFavorite(response)}>favorite</a>
+                        <button href="#" onClick={()=> setFavorite(response)}>favorite</button>
                       </div>
                     ) : (
                       <div>{LoadingElement}</div>
@@ -165,7 +185,7 @@ class App extends React.Component {
                 <div onClick={toggleListItem}>{subreddit}</div>
               )
             )}/>
-          ))}
+          )).concat(<ToggleAll key="xyz"/>)}
         </List>
       </div>
     )
