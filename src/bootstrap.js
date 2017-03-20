@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import LoadComponent from './LoadComponent'
 
 class App extends React.Component {
-  
+
   state = {
     showChart: false
   }
