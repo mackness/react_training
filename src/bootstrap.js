@@ -1,25 +1,33 @@
 import * as React from 'react'
 import ReactDOM from 'react-dom'
+import LoadComponent from './LoadComponent'
 
 class App extends React.Component {
+  
   state = {
-    AsyncModule: null
+    showChart: false
   }
 
-  loadModule = () => {
-    System.import('./AsyncModule').then(AsyncModule => {
-      this.setState({AsyncModule:AsyncModule.default})
+  showChart = () => {
+    this.setState({
+      showChart: !this.state.showChart
     })
   }
 
   render() {
-    let AsyncModule = this.state.AsyncModule
     return (
-      !this.state.AsyncModule ? (
-        <button onClick={this.loadModule}>load module</button>
-      ) : (
-        <AsyncModule/>
-      )
+    <div>
+      <button onClick={this.showChart}>load chart</button>
+      {this.state.showChart ? (
+        <LoadComponent path='Chart' render={(Chart)=> {
+          if(Chart) {
+            return <Chart />
+          } else {
+            return <div>Loading...</div>
+          }
+        }}/>
+      ) : null}
+    </div>
     )
   }
 }
